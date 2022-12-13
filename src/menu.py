@@ -1,6 +1,7 @@
 from src.utils.colors import R,W,O,Y,N,G,O,S,B
 from src.tetris import tetris
 from src.sos import sos
+from src.password import password_man
 from src.courses import courses
 import sense_hat
 
@@ -64,8 +65,6 @@ def menu() :
     game_state = { 
             "picks" : (list_de_course(), tetris_menu(), SOS_menu(), password()),
             "choice_index" : 0,
-            "comp_score" : 0,
-            "user_score" : 0
             }
 
     def display(state) :
@@ -76,7 +75,6 @@ def menu() :
         sense.set_pixels(state["picks"][state["choice_index"]])
     
     sense.clear()
-    display(game_state)
 
     ####
     # Main Loop
@@ -91,10 +89,8 @@ def menu() :
                     continue
                 if event.direction == 'left':
                     game_state["choice_index"] += 1
-                    display(game_state)
                 elif event.direction == 'right':
                     game_state["choice_index"] -= 1
-                    display(game_state)
                 elif event.direction == 'middle':
                     # User picks selected option
                     if(game_state["choice_index"] == 0) :
@@ -103,3 +99,6 @@ def menu() :
                         tetris()
                     if(game_state["choice_index"] == 2) :
                         sos()
+                    if(game_state["choice_index"] == 3) :
+                        password_man()
+        display(game_state)

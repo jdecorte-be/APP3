@@ -19,35 +19,27 @@ def sounds_light():
 
 
 def courses() :
-    # rhasspy.train_intent_files("sentences.ini")
+    sense.set_pixels(sounds_light())
 
-    choice = 1
-    while True:
-        events = sense.stick.get_events()
-        if events:
-            for event in events:
-                if event.action != 'pressed':
-                    #this is a hold or keyup; move on
-                    continue
-                if event.direction == 'right' and choice < 3:
-                    choice += 1
-                elif event.direction == 'left' and choice > 1:
-                    choice -= 1
-                elif event.direction == 'middle':
-                    sense.set_pixels(sounds_light())
-                    f = open("/home/pi/projetAPP03/src/db/courses" + str(choice) + ".txt", "w")
+    f = open("/home/pi/APP3/src/db/courses.txt", 'r+')
 
-                    while True :
-                        intent = rhasspy.speech_to_intent()
-                        if(intent["name"] == "leave") :
-                            break
-                        if(intent["name"] == "create") :
-                            f.close()
-                        if(intent["name"] == "ajouter") :
-                            f.write(intent["variables"]["aliments"] + '\n')
-                        
-                sense.show_letter(str(choice))
- 
+    while True :
+        f.seek(0)
+        course_list = f.read().split("\n")
+        print(course_list)
+    
+        intent = rhasspy.speech_to_intent()
+        if(intent["name"] == "leave") :
+            break
+        if(intent["name"] == "create") :
+            f.truncate(0)
+        if(intent["name"] == "list") :
+            rhasspy.text_to_speech("Il y a dans votre liste : ")
+            for alim in course_list :
+                rhasspy.text_to_speech(alim)
+        if(intent["name"] == "ajouter" and not course_list.count(intent["variables"]["aliments"])) :
+            f.write(intent["variables"]["aliments"] + '\n')
+            f.flush()
 
 
 
