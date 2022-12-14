@@ -1,5 +1,4 @@
 from src.utils.colors import R,W,O,Y,N,G,O,S,B
-from src.tetris import tetris
 from src.sos import sos
 from src.password import password_man
 from src.courses import courses
@@ -46,32 +45,19 @@ def menu() :
         ]
         return logo
         
-    def tetris_menu():
-        logo = [
-        W, W, W, W, W, W, W, W, 
-        W, B, B, B, B, W, Y, W,
-        W, W, W, W, W, W, Y, W, 
-        W, G, G, W, W, W, Y, W,
-        W, G, G, W, W, Y, Y, W,
-        O, W, W, W, W, W, W, W,
-        O, O, W, W, R, R, R, W,
-        W, O, W, W, W, R, W, W,
-        ]
-        return logo
-        
     sense = sense_hat.SenseHat()
     sense.low_light = True
 
     game_state = { 
-            "picks" : (list_de_course(), tetris_menu(), SOS_menu(), password()),
+            "picks" : (list_de_course(), SOS_menu(), password()),
             "choice_index" : 0,
             }
 
     def display(state) :
-        if(state["choice_index"] == 4) :
+        if(state["choice_index"] == 3) :
             state["choice_index"] = 0
         elif (state["choice_index"] == -1) :
-            state["choice_index"] = 3
+            state["choice_index"] = 2
         sense.set_pixels(state["picks"][state["choice_index"]])
     
     sense.clear()
@@ -96,9 +82,7 @@ def menu() :
                     if(game_state["choice_index"] == 0) :
                         courses()
                     if(game_state["choice_index"] == 1) :
-                        tetris()
-                    if(game_state["choice_index"] == 2) :
                         sos()
-                    if(game_state["choice_index"] == 3) :
+                    if(game_state["choice_index"] == 2) :
                         password_man()
         display(game_state)

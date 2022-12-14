@@ -4,26 +4,15 @@ sense = sense_hat.SenseHat()
 
 def send_msg() :
     headers = {
-        'Authorization': 'Bearer fd1f12ec77ca4788a1b5b9185941b3de',
-        # Already added when you pass json= but not when you pass data=
-        # 'Content-Type': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
     }
 
-    json_data = {
-        'from': '447520651702',
-        'to': [
-            '32468258791',
-        ],
-        'body': 'The Raspberry need help !',
-    }
+    data = 'from=Vonage APIs&text=The Raspberry need help !&to=32468258791&api_key=4e3e591f&api_secret=Nh2neow7xdfmfDsn'
 
-    response = requests.post('https://sms.api.sinch.com/xms/v1/d05fb5eb096d49da8f5173dbdf62e5fd/batches', headers=headers, json=json_data)
-
-    # Note: json_data will not be serialized by requests
-    # exactly as it was in the original request.
-    data = '\n  {\n    "from": "447520651702",\n    "to": [ "32468258791" ],\n    "body": "Enter test message here"\n  }'
-    response = requests.post('https://sms.api.sinch.com/xms/v1/d05fb5eb096d49da8f5173dbdf62e5fd/batches', headers=headers, data=data)
+    response = requests.post('https://rest.nexmo.com/sms/json', headers=headers, data=data)
+    print(response)
     sense.show_message("Le messages est envoye !")
+
 
 def sos() :
     info = {
@@ -40,7 +29,7 @@ def sos() :
         if(orientation["pitch"] < 40) :
             info["balance"] = True
         if(info["count"] > 3) :
-            for i in range(4) :
+            for i in range(3, 0, -1) :
                 sense.show_message(str(i))
             send_msg()
             break
