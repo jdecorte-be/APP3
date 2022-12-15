@@ -46,20 +46,33 @@ def menu() :
         W, W, W, W, W, W, W, W,
         ]
         return logo
-        
+
+    def tetris_menu():
+        logo = [
+        W, W, W, W, W, W, W, W, 
+        W, B, B, B, B, W, Y, W,
+        W, W, W, W, W, W, Y, W, 
+        W, G, G, W, W, W, Y, W,
+        W, G, G, W, W, Y, Y, W,
+        O, W, W, W, W, W, W, W,
+        O, O, W, W, R, R, R, W,
+        W, O, W, W, W, R, W, W,
+        ]
+        return logo
+    
     s = sense_hat.SenseHat()
     s.low_light = True
 
     game_state = { 
-            "picks" : (list_de_course(), SOS_menu(), password()),
+            "picks" : (list_de_course(), SOS_menu(), password(), tetris_menu()),
             "choice_index" : 0,
             }
 
     def display(state) :
-        if(state["choice_index"] == 3) :
+        if(state["choice_index"] == 4) :
             state["choice_index"] = 0
         elif (state["choice_index"] == -1) :
-            state["choice_index"] = 2
+            state["choice_index"] = 3
         s.set_pixels(state["picks"][state["choice_index"]])
     
     s.clear()

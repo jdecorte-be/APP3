@@ -71,6 +71,7 @@ un élément à une liste de cours, quitter la fonction ou lister les cours dans
 Il utilise également le package Rhasspy pour gérer les commandes vocales
 et la fonctionnalité de synthèse vocale.
 """
+
 def display(state):
     if state["choice_index"] == 3:
         state["choice_index"] = 0

@@ -88,7 +88,7 @@ class Brick:
                 dropped = True
         return dropped
 
-    def markActives(self):
+    def activate(self):
         for y in range(len(figures[self.type][self.rotation])):
             for x in range(len(figures[self.type][self.rotation][y])):
                 if figures[self.type][self.rotation][y][x] != 0:
@@ -122,7 +122,7 @@ def mainloop():
 
     if selectedBrick.dropped():
 
-        selectedBrick.markActives()
+        selectedBrick.activate()
         selectedBrick = newfigure()
 
     for i in range(len(occupied)):
