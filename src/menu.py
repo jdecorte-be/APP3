@@ -45,8 +45,8 @@ def menu() :
         ]
         return logo
         
-    sense = sense_hat.SenseHat()
-    sense.low_light = True
+    s = sense_hat.SenseHat()
+    s.low_light = True
 
     game_state = { 
             "picks" : (list_de_course(), SOS_menu(), password()),
@@ -58,16 +58,28 @@ def menu() :
             state["choice_index"] = 0
         elif (state["choice_index"] == -1) :
             state["choice_index"] = 2
-        sense.set_pixels(state["picks"][state["choice_index"]])
+        s.set_pixels(state["picks"][state["choice_index"]])
     
-    sense.clear()
+    s.clear()
 
+
+    """
+    Ce code utilise le Sense HAT, une carte d'extension matérielle pour le Raspberry Pi,
+    pour afficher un menu sur la matrice LED 8x8 du Sense HAT. Le menu comprend trois options :
+    une liste de courses, un appel SOS et une option pour gérer un mot de passe. L'utilisateur
+    peut naviguer dans le menu en utilisant le joystick du Sense HAT et sélectionner une option
+    en appuyant sur le joystick.
+    
+    Chaque option lance une fonction correspondante qui effectue une action spécifique.
+    Le code utilise également des couleurs prédéfinies pour afficher
+    des motifs de lumières sur la matrice LED.
+    """
     ####
     # Main Loop
     ####
 
     while True:
-        events = sense.stick.get_events()
+        events = s.stick.get_events()
         if events:
             for event in events:
                 if event.action != 'pressed':
@@ -86,3 +98,4 @@ def menu() :
                     if(game_state["choice_index"] == 2) :
                         password_man()
         display(game_state)
+        sleep(0.1)

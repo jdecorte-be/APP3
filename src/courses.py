@@ -2,8 +2,7 @@ import sense_hat, random, time
 import rhasspy as rhasspy
 from src.utils.colors import R,W,O,Y,N,G,O,S,B
 
-sense = sense_hat.SenseHat()
-
+s = sense_hat.SenseHat()
 
 def plus_sign():
     light = [
@@ -56,25 +55,35 @@ N,N,N,W,W,N,N,N,
 N,N,N,W,W,N,N,N]
     return arrow
 
-
-
 menu = { 
         "picks" : (plus_sign(), xred(), backarrow()),
         "choice_index" : 0,
         }
+
+
+"""
+Ce code utilise le Sense HAT, une carte d'extension matérielle
+pour le Raspberry Pi, pour afficher différents motifs de lumières sur la matrice LED 
+8x8 du Sense HAT. Les motifs sont un signe plus, une croix rouge et une flèche arrière.
+
+Il définit également une fonction add_list qui écoute un ordre vocal pour ajouter 
+un élément à une liste de cours, quitter la fonction ou lister les cours dans le fichier.
+Il utilise également le package Rhasspy pour gérer les commandes vocales
+et la fonctionnalité de synthèse vocale.
+"""
 
 def display(state) :
     if(state["choice_index"] == 3) :
         state["choice_index"] = 0
     elif (state["choice_index"] == -1) :
         state["choice_index"] = 2
-    sense.set_pixels(state["picks"][state["choice_index"]])
+    s.set_pixels(state["picks"][state["choice_index"]])
 
 
 def add_list() :
     f = open("/home/pi/APP3/src/db/courses.txt", 'r+')
 
-    sense.set_pixels(sounds_light())
+    s.set_pixels(sounds_light())
     while True :
         f.seek(0)
         course_list = f.read().split("\n")
@@ -93,11 +102,11 @@ def add_list() :
             f.flush()
 
 def courses() :
-    sense.clear()
+    s.clear()
     f = open("/home/pi/APP3/src/db/courses.txt", 'r+')
 
     while True:
-        events = sense.stick.get_events()
+        events = s.stick.get_events()
         if events:
             for event in events:
                 if event.action != 'pressed':

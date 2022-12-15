@@ -3,10 +3,10 @@ from sense_hat import SenseHat
 import rhasspy as rhasspy
 
 
-sense = SenseHat()
+s = SenseHat()
 
 def main():
-    # rhasspy.train_intent_files("sentences.ini")
+    # rhasspy.train_intent_files("sentences.ini") // si besoin d'entrainement
     menu()
 
 if __name__ == "__main__":
