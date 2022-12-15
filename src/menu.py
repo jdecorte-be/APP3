@@ -2,6 +2,8 @@ from src.utils.colors import R,W,O,Y,N,G,O,S,B
 from src.sos import sos
 from src.password import password_man
 from src.courses import courses
+from src.tetris import tetris
+
 import sense_hat
 
 def menu() :
@@ -97,5 +99,7 @@ def menu() :
                         sos()
                     if(game_state["choice_index"] == 2) :
                         password_man()
+                    if(game_state["choice_index"] == 3) :
+                        tetris()
         display(game_state)
         sleep(0.1)

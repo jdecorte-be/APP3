@@ -108,45 +108,67 @@ def launch_manual() :
 
 
 def password_man() :
+    # Open the password file in read/write mode
     f = open("/home/pi/APP3/src/db/password", 'r+')
+
+    # Initialize variables
     code = ""
     numero = ""
     catch_pass = True
 
+    # Read the contents of the password file
     decryptfile = f.readlines()
+
+    # If the password file has contents, ask the user for their password
     if(decryptfile) :
         s.show_message("Code ?")
         s.set_pixels(sounds_light())
+        # Decode and print the stored password
         print(decode(decryptfile[0], decryptfile[1]))
+        # Ask the user for their password
         while(True) :
             intent = rhasspy.speech_to_intent()
+            # If the user says "leave", exit the function
             if(intent["name"] == "leave") :
                 return
+            # If the user provides a 4-digit code, check if it matches the stored password
             if(intent["name"] == "code" and len(intent["variables"]) == 4) :
                 codetotest = ""
                 for i in range(4) :
+                    # Build the code that the user provided
                     codetotest += intent["variables"]["aliments" + str(i)] + ","
+                # Compare the user-provided code to the stored password
                 print(decryptfile[0].strip("\n") , "   ", hashing(codetotest))
                 if(decryptfile[0].strip("\n") == hashing(codetotest)) :
+                    # If the code matches, decode and display the stored number
                     s.show_message("Numero : " + decode(decryptfile[0], decryptfile[1]))
                     break
 
+    # Keep asking the user for a password until they provide one
     while catch_pass:
+        # Reset the file pointer to the beginning of the file
         f.seek(0)
+        # Get user input events from the joystick
         events = s.stick.get_events()
+        # If there are any events (e.g. button presses)
         if events:
             for event in events:
+                # If the event is not a button press, move on to the next event
                 if event.action != 'pressed':
-                    #this is a hold or keyup; move on
                     continue
+                # If the user presses the left button and the count is less than 9, increment the count
                 if event.direction == 'left':
                     menu["choice_index"] += 1
+                # If the user presses the right button and the count is greater than 0, decrement the count
                 elif event.direction == 'right':
                     menu["choice_index"] -= 1
+                # If the user presses the middle button,
                 elif event.direction == 'middle':
-                    # User picks selected option
+                    # If the current menu option is "display the stored number",
                     if(menu["choice_index"] == 0) :
+                        # If the password file has contents,
                         if(decryptfile) :
+                            # Decode and display the stored number
                             decryptnum = decode(decryptfile[0], decryptfile[1])
                             s.show_message(decryptnum)
                             for c in decryptnum :
@@ -175,7 +197,4 @@ def password_man() :
     print(code)
     f.write(hashing(code) + "\n")
     f.write(encode(hashing(code), numero))
-
-
-
 

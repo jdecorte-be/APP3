@@ -13,6 +13,7 @@ Si le compteur atteint un certain nombre de fois, un SMS est envoyé en utilisan
 utilise également le package Requests pour gérer les requêtes HTTP.
 """
 
+
 def send_msg():
     """
     Cette fonction envoie un SMS à un numéro prédéfini en utilisant les API Nexmo.
@@ -20,17 +21,20 @@ def send_msg():
 
     # Définir les en-têtes pour la requête HTTP
     headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        "Content-Type": "application/x-www-form-urlencoded",
     }
 
     # Définir les données pour la requête HTTP
-    data = 'from=Vonage APIs&text=The Raspberry need help !&to=32468258791&api_key=4e3e591f&api_secret=Nh2neow7xdfmfDsn'
+    data = "from=Vonage APIs&text=The Raspberry need help !&to=32468258791&api_key=4e3e591f&api_secret=Nh2neow7xdfmfDsn"
 
     # Envoyer la requête HTTP en utilisant les API Nexmo
-    response = requests.post('https://rest.nexmo.com/sms/json', headers=headers, data=data)
+    response = requests.post(
+        "https://rest.nexmo.com/sms/json", headers=headers, data=data
+    )
 
     # Afficher un message pour indiquer que le SMS a été envoyé
     s.show_message("Le messages est envoye !")
+
 
 def sos():
     """
@@ -39,23 +43,25 @@ def sos():
 
     # Initialiser les variables pour la détection du geste
     info = {
-        "count": 0, # Compteur pour le nombre de fois où le geste a été détecté
-        "balance": True # Booléen pour indiquer si le Raspberry Pi est à l'horizontale
+        "count": 0,  # Compteur pour le nombre de fois où le geste a été détecté
+        "balance": True,  # Booléen pour indiquer si le Raspberry Pi est à l'horizontale
     }
 
     # Boucle infinie
-    while(1) :
+    while 1:
         orientation = s.get_orientation_degrees()
         print(orientation["pitch"])
-        if(orientation["pitch"] > 40 and  100 > orientation["pitch"] and info["balance"] == True) :
+        if (
+            orientation["pitch"] > 40
+            and 100 > orientation["pitch"]
+            and info["balance"] == True
+        ):
             info["count"] = info["count"] + 1
             info["balance"] = False
-        if(orientation["pitch"] < 40) :
+        if orientation["pitch"] < 40:
             info["balance"] = True
-        if(info["count"] > 3) :
-            for i in range(3, 0, -1) :
+        if info["count"] > 3:
+            for i in range(3, 0, -1):
                 s.show_message(str(i))
             send_msg()
             break
-
-    
